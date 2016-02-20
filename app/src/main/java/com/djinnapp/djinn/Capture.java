@@ -101,8 +101,11 @@ public class Capture extends Activity implements OnClickListener {
             File f = new File(imageHDpath);
             Future uploading = Ion.with(Capture.this)
                 .load("@Strings/url" + "/api/upload")
+                .setMultipartParameter("eventId", "@Strings/eventID")
+                .setMultipartParameter("title", "title")
+                .setMultipartParameter("description", "description")
                 .setMultipartFile("image", f)
-                .asString()
+                .asJsonObject()
                 .withResponse()
                 .setCallback(new FutureCallback<Response<String>>() {
                     @Override
