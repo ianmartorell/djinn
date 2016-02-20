@@ -11,13 +11,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.JsonIOException;
@@ -26,19 +23,12 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.Future;
 
-public class Capture extends Activity implements OnClickListener {
+public class CaptureActivity extends Activity implements OnClickListener {
 
     ImageView mImageView;
     ImageButton cam;
@@ -48,7 +38,7 @@ public class Capture extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.capture_layout);
+        setContentView(R.layout.activity_capture);
         mImageView = (ImageView) findViewById(R.id.img1);
         cam = (ImageButton) findViewById(R.id.camera);
         cam.setOnClickListener(this);
@@ -101,7 +91,7 @@ public class Capture extends Activity implements OnClickListener {
             mImageView.setImageBitmap(imageHD);
 
             File f = new File(imageHDpath);
-            Future uploading = Ion.with(Capture.this)
+            Future uploading = Ion.with(CaptureActivity.this)
                 .load(getResources().getString(R.string.url) + "/api/upload")
                 .setMultipartParameter("eventId", getResources().getString(R.string.eventID))
                 .setMultipartParameter("title", "title")

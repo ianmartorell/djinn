@@ -1,33 +1,25 @@
 package com.djinnapp.djinn;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.util.AbstractCollection;
-import java.util.Iterator;
-import java.util.List;
-
 /**
  * Created by nacho on 20/02/2016.
  */
-public class layouttest extends Activity {
+public class GalleryActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gridnew);
+        setContentView(R.layout.activity_gallery);
         Button gen = (Button) findViewById(R.id.generate);
         gen.setOnClickListener(new View.OnClickListener() {
             @Override
