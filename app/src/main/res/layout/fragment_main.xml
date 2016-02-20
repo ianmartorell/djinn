@@ -26,7 +26,23 @@
         android:layout_height="wrap_content"
         android:text="Start"
         android:id="@+id/start"
+        android:layout_above="@+id/grid"
+        android:layout_alignStart="@+id/grid" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gallery"
+        android:id="@+id/grid"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join Event"
+        android:id="@+id/join"
+        android:layout_above="@+id/start"
+        android:layout_alignEnd="@+id/start" />
 
 </RelativeLayout>

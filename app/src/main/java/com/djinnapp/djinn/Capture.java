@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.koushikdutta.async.future.FutureCallback;
@@ -83,27 +84,6 @@ public class Capture extends Activity implements OnClickListener {
 
             Bitmap imageBitmap = (Bitmap) data.getExtras().get("data"); // Thumbnail
             mImageView.setImageBitmap(imageBitmap);
-
-            File f = new File(path);
-            Future uploading = Ion.with(Capture.this)
-                .load("http://5c4ad84b.ngrok.com/upload-full")
-                .setMultipartFile("image", f)
-                .asString()
-                .withResponse()
-                .setCallback(new FutureCallback<Response<String>>() {
-                    @Override
-                    public void onCompleted(Exception e, Response<String> result) {
-                        try {
-                            JSONObject jobj = new JSONObject(result.getResult());
-                            Toast.makeText(getApplicationContext(), jobj.getString("response"), Toast.LENGTH_SHORT).show();
-
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        }
-
-                    }
-                });
-
         }
 
         if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE  && resultCode == RESULT_OK)
@@ -118,9 +98,9 @@ public class Capture extends Activity implements OnClickListener {
             String imageLDpath = SaveImage(imageLD);
             mImageView.setImageBitmap(imageHD);
 
-            File f = new File(path);
+            File f = new File(imageHDpath);
             Future uploading = Ion.with(Capture.this)
-                    .load("http://5c4ad84b.ngrok.com/upload-full")
+                    .load("http://5c4ad84b.ngrok.com/upload")
                     .setMultipartFile("image", f)
                     .asString()
                     .withResponse()

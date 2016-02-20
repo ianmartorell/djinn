@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button start;
+    Button start,grid,createEvent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +23,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent("com.djinapp.djinn.CAPTURE"));
             }
         });
+
+        grid = (Button) findViewById(R.id.grid);
+        grid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent("com.djinapp.djinn.LT"));
+            }
+        });
+        createEvent = (Button) findViewById(R.id.join);
+        createEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent("com.djinapp.djinn.CREATE"));
+            }
+        });
+
     }
 
 
