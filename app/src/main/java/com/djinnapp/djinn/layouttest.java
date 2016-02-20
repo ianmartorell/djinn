@@ -38,7 +38,7 @@ public class layouttest extends Activity {
 
                 String s= "@Strings/eventID";
                 Ion.with(getApplicationContext())
-                    .load("@Strings/url"+"/api/photos?eventId="+s)
+                    .load(getResources().getString(R.string.url)+"/api/photos?eventId="+s)
                     .asJsonObject()
                     .setCallback(new FutureCallback<JsonObject>() {
                         @Override
@@ -49,7 +49,7 @@ public class layouttest extends Activity {
                                 img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                                 JsonObject obj = (JsonObject) (photos.get(i));
                                 String z = obj.get("_id").getAsString();
-                                Ion.with(img).load("@Strings/url"+"/api/photos/thumb/"+z+".jpg");
+                                Ion.with(img).load(getResources().getString(R.string.url)+"/api/photos/thumb/"+z+".jpg");
                                 GridLayout.LayoutParams lparams = new GridLayout.LayoutParams(
 
                                 );

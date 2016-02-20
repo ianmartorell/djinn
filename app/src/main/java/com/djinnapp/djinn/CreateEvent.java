@@ -31,21 +31,21 @@ public class CreateEvent extends Activity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = et.getText().toString();
-                // Send create event POST
-                JsonObject json = new JsonObject();
-                json.addProperty("name", name);
-                Ion.with(getApplicationContext())
-                    .load("@Strings/url" + "/api/events/create")
-                    .setJsonObjectBody(json)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-
-                        }
-                    });
-                finish();
+            String name = et.getText().toString();
+            // Send create event POST
+            JsonObject json = new JsonObject();
+            json.addProperty("name", name);
+            Ion.with(getApplicationContext())
+                .load(getResources().getString(R.string.url) + "/api/events/create")
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                    String eventId = result.get("eventId").getAsString();
+                    }
+                });
+            finish();
             }
         });
     }

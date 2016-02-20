@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
@@ -100,24 +102,22 @@ public class Capture extends Activity implements OnClickListener {
 
             File f = new File(imageHDpath);
             Future uploading = Ion.with(Capture.this)
-                .load("@Strings/url" + "/api/upload")
-                .setMultipartParameter("eventId", "@Strings/eventID")
+                .load(getResources().getString(R.string.url) + "/api/upload")
+                .setMultipartParameter("eventId", getResources().getString(R.string.eventID))
                 .setMultipartParameter("title", "title")
                 .setMultipartParameter("description", "description")
                 .setMultipartFile("image", f)
                 .asJsonObject()
                 .withResponse()
-                .setCallback(new FutureCallback<Response<String>>() {
+                .setCallback(new FutureCallback<Response<JsonObject>>() {
                     @Override
-                    public void onCompleted(Exception e, Response<String> result) {
+                    public void onCompleted(Exception e, Response<JsonObject> result) {
                         try {
-                            JSONObject jobj = new JSONObject(result.getResult());
-                            Toast.makeText(getApplicationContext(), jobj.getString("response"), Toast.LENGTH_SHORT).show();
-
-                        } catch (JSONException e1) {
+                            JsonObject jobj = result.getResult();
+                            Toast.makeText(getApplicationContext(), jobj.get("response").getAsString(), Toast.LENGTH_SHORT).show();
+                        } catch (JsonIOException e1) {
                             e1.printStackTrace();
                         }
-
                     }
                 });
         }
