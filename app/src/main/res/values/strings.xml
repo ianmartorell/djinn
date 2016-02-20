@@ -2,4 +2,7 @@
     <string name="app_name">Djinn</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="main_title">Djinn</string>
+    <string name="main_subtitle">Photo sharing made simple</string>
+
 </resources>
