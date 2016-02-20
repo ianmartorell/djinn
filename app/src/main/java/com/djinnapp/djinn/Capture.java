@@ -27,9 +27,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
@@ -104,18 +106,61 @@ public class Capture extends Activity implements OnClickListener {
 
         }
 
-        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE)
+        if (requestCode == CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE  && resultCode == RESULT_OK)
         {
             //Get our saved file into a bitmap object:
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
 
             Bitmap imageHD = decodeSampledBitmapFromFile(file.getAbsolutePath(), 1000, 1000);
-            Bitmap imageLD = decodeSampledBitmapFromFile(file.getAbsolutePath(),100, 100);
+            Bitmap imageLD = decodeSampledBitmapFromFile(file.getAbsolutePath(), 100, 100);
 
-            mImageView.setImageBitmap(imageLD); // bitmap = HD
+            String imageHDpath = SaveImage(imageHD);
+            String imageLDpath = SaveImage(imageLD);
+            mImageView.setImageBitmap(imageHD);
 
+            File f = new File(path);
+            Future uploading = Ion.with(Capture.this)
+                    .load("http://5c4ad84b.ngrok.com/upload-full")
+                    .setMultipartFile("image", f)
+                    .asString()
+                    .withResponse()
+                    .setCallback(new FutureCallback<Response<String>>() {
+                        @Override
+                        public void onCompleted(Exception e, Response<String> result) {
+                            try {
+                                JSONObject jobj = new JSONObject(result.getResult());
+                                Toast.makeText(getApplicationContext(), jobj.getString("response"), Toast.LENGTH_SHORT).show();
 
+                            } catch (JSONException e1) {
+                                e1.printStackTrace();
+                            }
+
+                        }
+                    });
         }
+    }
+
+    private String SaveImage(Bitmap finalBitmap) {
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/saved_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-"+ n +".jpg";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return myDir + "/" + fname;
     }
 
     public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight)
