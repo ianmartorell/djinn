@@ -38,36 +38,27 @@ public class layouttest extends Activity {
 
                 String s= "@Strings/eventID";
                 Ion.with(getApplicationContext())
-                        .load("http://5c4ad84b.ngrok.com/api/photos?eventId="+s)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
-                                JsonArray photos = result.getAsJsonArray("photos");
-                                for (int i = 0; i < photos.size(); ++i){
-                                    ImageView img = new ImageView(getApplicationContext());
-                                    img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                                    JsonObject obj = (JsonObject) (photos.get(i));
-                                    String z = obj.get("_id").getAsString();
-                                    Ion.with(img).load("http://5c4ad84b.ngrok.com/api/photos/thumb/"+z+".jpg");
-                                    GridLayout.LayoutParams lparams = new GridLayout.LayoutParams(
+                    .load("@Strings/url"+"/api/photos?eventId="+s)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            JsonArray photos = result.getAsJsonArray("photos");
+                            for (int i = 0; i < photos.size(); ++i){
+                                ImageView img = new ImageView(getApplicationContext());
+                                img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                                JsonObject obj = (JsonObject) (photos.get(i));
+                                String z = obj.get("_id").getAsString();
+                                Ion.with(img).load("@Strings/url"+"/api/photos/thumb/"+z+".jpg");
+                                GridLayout.LayoutParams lparams = new GridLayout.LayoutParams(
 
-                                    );
-                                    img.setLayoutParams(lparams);
-                                    ll.addView(img);
-                                }
+                                );
+                                img.setLayoutParams(lparams);
+                                ll.addView(img);
                             }
-                        });
-                {
-
+                        }
+                    });
                 }
-
-
-
-                }
-
-
-
         });
     }
 }

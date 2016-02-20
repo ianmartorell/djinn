@@ -32,21 +32,20 @@ public class CreateEvent extends Activity {
             @Override
             public void onClick(View v) {
                 String name = et.getText().toString();
-                //TODO SEND CREATE GROUP POST
+                // Send create event POST
                 JsonObject json = new JsonObject();
                 json.addProperty("name", name);
                 Ion.with(getApplicationContext())
-                        .load("http://5c4ad84b.ngrok.com/events/create")
-                        .setJsonObjectBody(json)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
+                    .load("@Strings/url" + "/api/events/create")
+                    .setJsonObjectBody(json)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
 
-                            }
-                        });
+                        }
+                    });
                 finish();
-                //
             }
         });
     }

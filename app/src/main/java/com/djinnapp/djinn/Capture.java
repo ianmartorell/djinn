@@ -92,31 +92,31 @@ public class Capture extends Activity implements OnClickListener {
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
 
             Bitmap imageHD = decodeSampledBitmapFromFile(file.getAbsolutePath(), 1000, 1000);
-            Bitmap imageLD = decodeSampledBitmapFromFile(file.getAbsolutePath(), 100, 100);
+//            Bitmap imageLD = decodeSampledBitmapFromFile(file.getAbsolutePath(), 100, 100);
 
             String imageHDpath = SaveImage(imageHD);
-            String imageLDpath = SaveImage(imageLD);
+//            String imageLDpath = SaveImage(imageLD);
             mImageView.setImageBitmap(imageHD);
 
             File f = new File(imageHDpath);
             Future uploading = Ion.with(Capture.this)
-                    .load("http://5c4ad84b.ngrok.com/upload")
-                    .setMultipartFile("image", f)
-                    .asString()
-                    .withResponse()
-                    .setCallback(new FutureCallback<Response<String>>() {
-                        @Override
-                        public void onCompleted(Exception e, Response<String> result) {
-                            try {
-                                JSONObject jobj = new JSONObject(result.getResult());
-                                Toast.makeText(getApplicationContext(), jobj.getString("response"), Toast.LENGTH_SHORT).show();
+                .load("@Strings/url" + "/api/upload")
+                .setMultipartFile("image", f)
+                .asString()
+                .withResponse()
+                .setCallback(new FutureCallback<Response<String>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<String> result) {
+                        try {
+                            JSONObject jobj = new JSONObject(result.getResult());
+                            Toast.makeText(getApplicationContext(), jobj.getString("response"), Toast.LENGTH_SHORT).show();
 
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
-                            }
-
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
                         }
-                    });
+
+                    }
+                });
         }
     }
 

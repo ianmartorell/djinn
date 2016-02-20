@@ -33,7 +33,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.viewHolder>{
     public void onBindViewHolder(viewHolder holder, int position) {
         IPic item = Pictures.get(position);
         holder.Pic.setImageBitmap(null);
-
     }
 
 
