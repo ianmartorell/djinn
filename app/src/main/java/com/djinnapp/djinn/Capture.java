@@ -14,10 +14,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.concurrent.Future;
+
 public class Capture extends Activity implements OnClickListener {
 
     ImageView mImageView;
     Button cam;
+    String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +54,30 @@ public class Capture extends Activity implements OnClickListener {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            // TODO Upload
+
+
+            // TODO Save image file to path
+
+
+            File f = new File(path);
+            Future uploading = Ion.with(Capture.this)
+                .load("http://5c4ad84b.ngrok.com/upload")
+                .setMultipartFile("image", f)
+                .asString()
+                .withResponse()
+                .setCallback(new FutureCallback<Response<String>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<String> result) {
+                        try {
+                            JSONObject jobj = new JSONObject(result.getResult());
+                            Toast.makeText(getApplicationContext(), jobj.getString("response"), Toast.LENGTH_SHORT).show();
+
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+
+                    }
+                });
 
             mImageView.setImageBitmap(imageBitmap);
         }
