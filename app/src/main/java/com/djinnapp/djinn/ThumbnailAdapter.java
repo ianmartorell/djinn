@@ -31,6 +31,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.Thum
         public ThumbnailHolder(View itemView) {
             super(itemView);
             thumb = (ImageView) itemView.findViewById(R.id.label_imageView);
+            thumb.setScaleType(ImageView.ScaleType.CENTER);
             itemView.setOnClickListener(this);
         }
 
