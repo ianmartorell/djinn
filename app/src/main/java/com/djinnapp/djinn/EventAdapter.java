@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
         import android.view.ViewGroup;
         import android.widget.TextView;
         import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ian on 20/02/16.
@@ -61,9 +62,50 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
         notifyItemInserted(index);
     }
 
-    public void deleteItem(int index) {
-        mDataset.remove(index);
+    public Event removeItem(int index) {
+        final Event event = mDataset.remove(index);
         notifyItemRemoved(index);
+        return event;
+    }
+
+    public void moveItem(int fromPosition, int toPosition) {
+        final Event event = mDataset.remove(fromPosition);
+        mDataset.add(toPosition, event);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public void animateTo(List<Event> events) {
+        applyAndAnimateRemovals(events);
+        applyAndAnimateAdditions(events);
+        applyAndAnimateMovedItems(events);
+    }
+
+    private void applyAndAnimateRemovals(List<Event> newDataset) {
+        for (int i = mDataset.size() - 1; i >= 0; i--) {
+            final Event event = mDataset.get(i);
+            if (!newDataset.contains(event)) {
+                removeItem(i);
+            }
+        }
+    }
+
+    private void applyAndAnimateAdditions(List<Event> newDataset) {
+        for (int i = 0, count = newDataset.size(); i < count; i++) {
+            final Event event = newDataset.get(i);
+            if (!mDataset.contains(event)) {
+                addItem(event, i);
+            }
+        }
+    }
+
+    private void applyAndAnimateMovedItems(List<Event> newDataset) {
+        for (int toPosition = newDataset.size() - 1; toPosition >= 0; toPosition--) {
+            final Event event = newDataset.get(toPosition);
+            final int fromPosition = mDataset.indexOf(event);
+            if (fromPosition >= 0 && fromPosition != toPosition) {
+                moveItem(fromPosition, toPosition);
+            }
+        }
     }
 
     @Override
