@@ -2,8 +2,10 @@ package com.djinnapp.djinn;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +29,7 @@ public class GalleryActivity extends Activity {
     private RecyclerView.Adapter thumbAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FloatingActionButton button;
     ArrayList<Thumbnail> newThumbnails = new ArrayList<>();
 
     @Override
@@ -36,6 +39,7 @@ public class GalleryActivity extends Activity {
 
         galleryRecyclerView = (RecyclerView) findViewById(R.id.thumbnails_recyclerView);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.gallery_swipe_refresh);
+        button = (FloatingActionButton) findViewById(R.id.take_photo);
 
         galleryRecyclerView.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false);
@@ -48,8 +52,16 @@ public class GalleryActivity extends Activity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-            updateDataSet();
-            swipeRefreshLayout.setRefreshing(false);
+                updateDataSet();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent("com.djinapp.djinn.CAPTURE"));
+                updateDataSet();
             }
         });
     }

@@ -29,10 +29,9 @@ import java.io.FileOutputStream;
 import java.util.Random;
 import java.util.concurrent.Future;
 
-public class CaptureActivity extends Activity implements OnClickListener {
+public class CaptureActivity extends Activity {
 
     ImageView mImageView;
-    ImageButton cam;
     String path;
     Toast t;
 
@@ -41,8 +40,7 @@ public class CaptureActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
         mImageView = (ImageView) findViewById(R.id.img1);
-        cam = (ImageButton) findViewById(R.id.camera);
-        cam.setOnClickListener(this);
+        dispatchTakePictureIntent();
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -169,15 +167,4 @@ public class CaptureActivity extends Activity implements OnClickListener {
         return BitmapFactory.decodeFile(path, options);
     }
 
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.camera:
-                Toast t = Toast.makeText(getApplicationContext(), "starting camera", Toast.LENGTH_LONG);
-                t.show();
-                dispatchTakePictureIntent();
-                break;
-        }
-    }
 }
