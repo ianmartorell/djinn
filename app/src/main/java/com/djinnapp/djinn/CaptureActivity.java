@@ -114,6 +114,7 @@ public class CaptureActivity extends Activity implements OnClickListener {
                     }
                 });
         }
+        finish();
     }
 
     private String SaveImage(Bitmap finalBitmap) {
