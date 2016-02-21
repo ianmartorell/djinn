@@ -3,6 +3,7 @@ package com.djinnapp.djinn;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,7 +32,7 @@ public class GalleryActivity extends Activity {
 
         galleryRecyclerView = (RecyclerView) findViewById(R.id.thumbnails_recyclerView);
         galleryRecyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false);
         galleryRecyclerView.setLayoutManager(layoutManager);
         thumbAdapter = new ThumbnailAdapter(new ArrayList<Thumbnail>());
         updateDataSet();
