@@ -48,8 +48,8 @@ public class GalleryActivity extends Activity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateDataSet();
-                swipeRefreshLayout.setRefreshing(false);
+            updateDataSet();
+            swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -74,28 +74,28 @@ public class GalleryActivity extends Activity {
                 .setCallback(new FutureCallback<JsonObject>() {
                                  @Override
                                  public void onCompleted(Exception e, JsonObject result) {
-                                     newThumbnails.clear();
-                                     JsonArray photos = result.getAsJsonArray("photos");
-                                     for (int i = 0; i < photos.size(); ++i) {
-                                         JsonObject obj = (JsonObject) (photos.get(i));
-                                         final String id = obj.get("_id").getAsString();
-                                         Ion.with(getApplicationContext())
-                                                 .load(getResources().getString(R.string.url) + "/api/photos/thumb/" + id + ".jpg")
-                                                 .asBitmap()
-                                                 .setCallback(new FutureCallback<Bitmap>() {
-                                                     @Override
-                                                     public void onCompleted(Exception e, Bitmap result) {
-                                                         if (e != null)
-                                                             Log.i("updateDataSet", "fail getting bitmap");
-                                                         else {
-                                                             Thumbnail thumbnail = new Thumbnail(result, id);
-                                                             newThumbnails.add(thumbnail);
-                                                         }
-                                                     }
-                                                 });
+                     newThumbnails.clear();
+                     JsonArray photos = result.getAsJsonArray("photos");
+                     for (int i = 0; i < photos.size(); ++i) {
+                         JsonObject obj = (JsonObject) (photos.get(i));
+                         final String id = obj.get("_id").getAsString();
+                         Ion.with(getApplicationContext())
+                                 .load(getResources().getString(R.string.url) + "/api/photos/thumb/" + id + ".jpg")
+                                 .asBitmap()
+                                 .setCallback(new FutureCallback<Bitmap>() {
+                                     @Override
+                                     public void onCompleted(Exception e, Bitmap result) {
+                                         if (e != null)
+                                             Log.i("updateDataSet", "fail getting bitmap");
+                                         else {
+                                             Thumbnail thumbnail = new Thumbnail(result, id);
+                                             newThumbnails.add(thumbnail);
+                                         }
                                      }
-                                     ((ThumbnailAdapter) thumbAdapter).animateTo(newThumbnails);
-                                 }
-                             });
+                                 });
+                     }
+                     ((ThumbnailAdapter) thumbAdapter).animateTo(newThumbnails);
+                     }
+                 });
     }
 }
