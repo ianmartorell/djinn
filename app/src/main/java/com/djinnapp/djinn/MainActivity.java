@@ -16,13 +16,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        start = (Button) findViewById(R.id.start);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent("com.djinapp.djinn.CAPTURE"));
-            }
-        });
 
         grid = (Button) findViewById(R.id.grid);
         grid.setOnClickListener(new View.OnClickListener() {
