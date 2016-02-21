@@ -1,15 +1,12 @@
 package com.djinnapp.djinn;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridLayout;
-import android.widget.ImageView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -37,6 +34,7 @@ public class GalleryActivity extends Activity {
         layoutManager = new LinearLayoutManager(this);
         galleryRecyclerView.setLayoutManager(layoutManager);
         thumbAdapter = new ThumbnailAdapter(new ArrayList<Thumbnail>());
+        updateDataSet();
         galleryRecyclerView.setAdapter(thumbAdapter);
     }
 
@@ -44,50 +42,39 @@ public class GalleryActivity extends Activity {
     protected void onResume() {
         super.onResume();
         ((ThumbnailAdapter) thumbAdapter).setOnItemClickListener(new ThumbnailAdapter.ThumbnailClickListener() {
-                                                                         @Override
-                                                                         public void onItemClick(int position, View v) {
-                                                                             Log.i(LOG_TAG, " Clicked on Item " + position);
-                                                                         }
-                                                                     });
-    }
-
-
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gallery);
-        Button gen = (Button) findViewById(R.id.generate);
-        gen.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                final GridLayout ll = (GridLayout) findViewById(R.id.gridlay);
-                //---------
-                int id = 0;
-
-                String s= "@Strings/eventID";
-                Ion.with(getApplicationContext())
-                    .load(getResources().getString(R.string.url)+"/api/photos?eventId="+s)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            JsonArray photos = result.getAsJsonArray("photos");
-                            for (int i = 0; i < photos.size(); ++i){
-                                ImageView img = new ImageView(getApplicationContext());
-                                img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                                JsonObject obj = (JsonObject) (photos.get(i));
-                                String z = obj.get("_id").getAsString();
-                                Ion.with(img).load(getResources().getString(R.string.url)+"/api/photos/thumb/"+z+".jpg");
-                                GridLayout.LayoutParams lparams = new GridLayout.LayoutParams(
-
-                                );
-                                img.setLayoutParams(lparams);
-                                ll.addView(img);
-                            }
-                        }
-                    });
-                }
+            public void onItemClick(int position, View v) {
+                Log.i(LOG_TAG, " Clicked on Item " + position);
+            }
         });
-    }*/
+    }
+    private void updateDataSet() {
+        Ion.with(getApplicationContext())
+                .load(getResources().getString(R.string.url)+"/api/photos?eventId="+getResources().getString(R.string.eventID))
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                                 @Override
+                                 public void onCompleted(Exception e, JsonObject result) {
+                                     JsonArray photos = result.getAsJsonArray("photos");
+                                     for (int i = 0; i < photos.size(); ++i) {
+                                         JsonObject obj = (JsonObject) (photos.get(i));
+                                         final String id = obj.get("_id").getAsString();
+                                         Ion.with(getApplicationContext())
+                                                 .load(getResources().getString(R.string.url) + "/api/photos/thumb/" + id + ".jpg")
+                                                 .asBitmap()
+                                                 .setCallback(new FutureCallback<Bitmap>() {
+                                                     @Override
+                                                     public void onCompleted(Exception e, Bitmap result) {
+                                                         if (e != null)
+                                                             Log.i("updateDataSet", "fail getting bitmap");
+                                                         else {
+                                                             Thumbnail thumbnail = new Thumbnail(result, id);
+                                                             ((ThumbnailAdapter) thumbAdapter).addItem(thumbnail, 0);
+                                                         }
+                                                     }
+                                                 });
+                                     }
+                                 }
+                             });
+    }
 }
