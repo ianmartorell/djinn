@@ -1,6 +1,7 @@
 package com.djinnapp.djinn;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -50,8 +51,10 @@ public class GalleryActivity extends Activity {
         });
     }
     private void updateDataSet() {
+        String eventId = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                .getString("currentEventId", null);
         Ion.with(getApplicationContext())
-                .load(getResources().getString(R.string.url)+"/api/photos?eventId="+getResources().getString(R.string.eventID))
+                .load(getResources().getString(R.string.url)+"/api/photos?eventId="+eventId)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                                  @Override

@@ -4,6 +4,7 @@ package com.djinnapp.djinn;
  * Created by nacho on 20/02/2016.
  */
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -91,9 +92,11 @@ public class CaptureActivity extends Activity implements OnClickListener {
             mImageView.setImageBitmap(imageHD);
 
             File f = new File(imageHDpath);
+            String eventId = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                    .getString("currentEventId", null);
             Future uploading = Ion.with(CaptureActivity.this)
                 .load(getResources().getString(R.string.url) + "/api/upload")
-                .setMultipartParameter("eventId", getResources().getString(R.string.eventID))
+                .setMultipartParameter("eventId", eventId)
                 .setMultipartParameter("title", "title")
                 .setMultipartParameter("description", "description")
                 .setMultipartFile("image", f)

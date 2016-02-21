@@ -77,6 +77,7 @@ public class JoinEventActivity extends Activity {
                 getApplicationContext().getSharedPreferences(
                         getString(R.string.preference_file_key), Context.MODE_PRIVATE)
                         .edit().putString("currentEventId", ((EventAdapter) eventAdapter).getItemMongoId(position)).commit();
+                finish();
             }
         });
     }
