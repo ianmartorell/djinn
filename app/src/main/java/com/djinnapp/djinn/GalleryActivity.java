@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,8 @@ public class GalleryActivity extends Activity {
     private RecyclerView galleryRecyclerView;
     private RecyclerView.Adapter thumbAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    ArrayList<Thumbnail> newThumbnails = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +35,23 @@ public class GalleryActivity extends Activity {
         setContentView(R.layout.activity_gallery);
 
         galleryRecyclerView = (RecyclerView) findViewById(R.id.thumbnails_recyclerView);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.gallery_swipe_refresh);
+
         galleryRecyclerView.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false);
         galleryRecyclerView.setLayoutManager(layoutManager);
+
         thumbAdapter = new ThumbnailAdapter(new ArrayList<Thumbnail>());
         updateDataSet();
         galleryRecyclerView.setAdapter(thumbAdapter);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateDataSet();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -51,6 +65,7 @@ public class GalleryActivity extends Activity {
         });
     }
     private void updateDataSet() {
+
         String eventId = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
                 .getString("currentEventId", null);
         Ion.with(getApplicationContext())
@@ -59,6 +74,7 @@ public class GalleryActivity extends Activity {
                 .setCallback(new FutureCallback<JsonObject>() {
                                  @Override
                                  public void onCompleted(Exception e, JsonObject result) {
+                                     newThumbnails.clear();
                                      JsonArray photos = result.getAsJsonArray("photos");
                                      for (int i = 0; i < photos.size(); ++i) {
                                          JsonObject obj = (JsonObject) (photos.get(i));
@@ -73,11 +89,12 @@ public class GalleryActivity extends Activity {
                                                              Log.i("updateDataSet", "fail getting bitmap");
                                                          else {
                                                              Thumbnail thumbnail = new Thumbnail(result, id);
-                                                             ((ThumbnailAdapter) thumbAdapter).addItem(thumbnail, 0);
+                                                             newThumbnails.add(thumbnail);
                                                          }
                                                      }
                                                  });
                                      }
+                                     ((ThumbnailAdapter) thumbAdapter).animateTo(newThumbnails);
                                  }
                              });
     }
