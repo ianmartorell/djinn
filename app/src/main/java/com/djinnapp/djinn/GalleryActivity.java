@@ -49,7 +49,7 @@ public class GalleryActivity extends AppCompatActivity {
         galleryRecyclerView.setLayoutManager(layoutManager);
 
         thumbAdapter = new ThumbnailAdapter(new ArrayList<Thumbnail>());
-        updateDataSet();
+        this.updateDataSet();
         galleryRecyclerView.setAdapter(thumbAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -72,6 +72,7 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        this.updateDataSet();
         ((ThumbnailAdapter) thumbAdapter).setOnItemClickListener(new ThumbnailAdapter.ThumbnailClickListener() {
             @Override
             public void onItemClick(int position, View v) {
