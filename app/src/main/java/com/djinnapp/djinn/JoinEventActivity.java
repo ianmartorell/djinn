@@ -8,7 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -35,7 +38,8 @@ public class JoinEventActivity extends Activity {
         eventRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         eventRecyclerView.setLayoutManager(layoutManager);
-        eventAdapter = new EventAdapter(getDataSet());
+        eventAdapter = new EventAdapter(new ArrayList<Event>());
+        updateDataSet();
         eventRecyclerView.setAdapter(eventAdapter);
 
         Button createEventButton = (Button) findViewById(R.id.create_event_button);
@@ -72,12 +76,23 @@ public class JoinEventActivity extends Activity {
         });
     }
 
-    private ArrayList<Event> getDataSet() {
-        ArrayList results = new ArrayList<Event>();
-        for (int index = 0; index < 6; index++) {
-            Event obj = new Event("Some Primary Text " + index, "Secondary " + index);
-            results.add(index, obj);
-        }
-        return results;
+    private void updateDataSet() {
+        Ion.with(getApplicationContext())
+            .load(getResources().getString(R.string.url)+"/api/events")
+            .asJsonObject()
+            .setCallback(new FutureCallback<JsonObject>() {
+                @Override
+                public void onCompleted(Exception e, JsonObject result) {
+                    JsonArray events = result.getAsJsonArray("events");
+                    for (int i = 0; i < events.size(); ++i) {
+                        JsonObject obj = (JsonObject) (events.get(i));
+                        String id = obj.get("_id").getAsString();
+                        String name = obj.get("name").getAsString();
+//                        String date = obj.get("date").getAsString();
+                        Event event = new Event(id, name, "date");
+                        ((EventAdapter) eventAdapter).addItem(event, 0);
+                    }
+                }
+            });
     }
 }

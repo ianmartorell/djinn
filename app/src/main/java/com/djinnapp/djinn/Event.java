@@ -7,7 +7,7 @@ public class Event {
     private String name;
     private String date;
 
-    Event (String name, String date){
+    Event (String id, String name, String date){
         this.name = name;
         this.date = date;
     }
