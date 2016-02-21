@@ -6,4 +6,5 @@
     <string name="main_subtitle">Photo sharing made simple</string>
     <string name="eventID">56c8829567c550de44c7f6c4</string>
     <string name="url">http://5c4ad84b.ngrok.com</string>
+    <string name="preference_file_key">djinnapp_settings</string>
 </resources>

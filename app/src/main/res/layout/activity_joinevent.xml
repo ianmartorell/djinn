@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
     android:weightSum="1">
 
     <EditText
@@ -13,12 +11,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/eventName"
         android:hint="Type the name of the event"
+        android:layout_alignParentTop="true"
+        android:layout_margin="0dp"
         android:padding="15dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/events_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/eventName"
         android:layout_weight="1"
         android:scrollbars="vertical" />
 
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         android:text="Create Event"
         android:id="@+id/create_event_button"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp" />
-</LinearLayout>
+</RelativeLayout>

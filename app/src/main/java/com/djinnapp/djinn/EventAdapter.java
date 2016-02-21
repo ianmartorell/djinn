@@ -71,6 +71,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
         return mDataset.size();
     }
 
+    public String getItemMongoId(int position) {
+        return mDataset.get(position).getId();
+    }
+
     public interface EventClickListener {
         public void onItemClick(int position, View v);
     }

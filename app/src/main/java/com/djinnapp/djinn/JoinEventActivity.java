@@ -1,6 +1,8 @@
 package com.djinnapp.djinn;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -69,10 +72,12 @@ public class JoinEventActivity extends Activity {
         super.onResume();
         ((EventAdapter) eventAdapter).setOnItemClickListener(new
         EventAdapter.EventClickListener() {
-          @Override
-          public void onItemClick(int position, View v) {
-              Log.i(LOG_TAG, " Clicked on Item " + position);
-          }
+            @Override
+            public void onItemClick(int position, View v) {
+                getApplicationContext().getSharedPreferences(
+                        getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                        .edit().putString("currentEventId", ((EventAdapter) eventAdapter).getItemMongoId(position)).commit();
+            }
         });
     }
 
