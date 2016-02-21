@@ -6,7 +6,9 @@ import android.support.v7.widget.RecyclerView;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.TextView;
-        import java.util.ArrayList;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,7 +60,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
     }
 
     public void addItem(Event event, int index) {
-        mDataset.add(event);
+        mDataset.add(index, event);
         notifyItemInserted(index);
     }
 
@@ -74,7 +76,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
         return event;
     }
 
-    public void animateTo(List<Event> events) {
+    public void animateTo(List<com.djinnapp.djinn.Event> events) {
         applyAndAnimateRemovals(events);
         applyAndAnimateAdditions(events);
         applyAndAnimateMovedItems(events);
@@ -106,6 +108,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
                 moveItem(fromPosition, toPosition);
             }
         }
+    }
+
+    public ArrayList<Event> getDataset() {
+        return mDataset;
     }
 
     @Override
