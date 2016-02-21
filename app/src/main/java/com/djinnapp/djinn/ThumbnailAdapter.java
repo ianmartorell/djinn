@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ian on 20/02/16.
@@ -60,9 +61,49 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.Thum
         notifyItemInserted(index);
     }
 
-    public void deleteItem(int index) {
+    public void moveItem(int fromPosition, int toPosition) {
+        final Thumbnail thumbnail = mDataset.remove(fromPosition);
+        mDataset.add(toPosition, thumbnail);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public void removeItem(int index) {
         mDataset.remove(index);
         notifyItemRemoved(index);
+    }
+
+    public void animateTo(List<Thumbnail> thumbnails) {
+        applyAndAnimateRemovals(thumbnails);
+        applyAndAnimateAdditions(thumbnails);
+        applyAndAnimateMovedItems(thumbnails);
+    }
+
+    private void applyAndAnimateRemovals(List<Thumbnail> newDataset) {
+        for (int i = mDataset.size() - 1; i >= 0; i--) {
+            final Thumbnail thumbnail = mDataset.get(i);
+            if (!newDataset.contains(thumbnail)) {
+                removeItem(i);
+            }
+        }
+    }
+
+    private void applyAndAnimateAdditions(List<Thumbnail> newDataset) {
+        for (int i = 0, count = newDataset.size(); i < count; i++) {
+            final Thumbnail thumbnail = newDataset.get(i);
+            if (!mDataset.contains(thumbnail)) {
+                addItem(thumbnail, i);
+            }
+        }
+    }
+
+    private void applyAndAnimateMovedItems(List<Thumbnail> newDataset) {
+        for (int toPosition = newDataset.size() - 1; toPosition >= 0; toPosition--) {
+            final Thumbnail thumbnail = newDataset.get(toPosition);
+            final int fromPosition = mDataset.indexOf(thumbnail);
+            if (fromPosition >= 0 && fromPosition != toPosition) {
+                moveItem(fromPosition, toPosition);
+            }
+        }
     }
 
     @Override
