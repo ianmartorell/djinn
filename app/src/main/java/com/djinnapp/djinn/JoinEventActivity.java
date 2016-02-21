@@ -61,6 +61,9 @@ public class JoinEventActivity extends Activity {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 String eventId = result.get("eventId").getAsString();
+                                getApplicationContext().getSharedPreferences(
+                                        getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                                        .edit().putString("currentEventId", eventId).commit();
                             }
                         });
                 finish();
