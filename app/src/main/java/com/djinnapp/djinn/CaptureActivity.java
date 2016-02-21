@@ -107,7 +107,7 @@ public class CaptureActivity extends Activity implements OnClickListener {
                     public void onCompleted(Exception e, Response<JsonObject> result) {
                         try {
                             JsonObject jobj = result.getResult();
-                            Toast.makeText(getApplicationContext(), jobj.get("response").getAsString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), jobj.get("status").getAsString(), Toast.LENGTH_SHORT).show();
                         } catch (JsonIOException e1) {
                             e1.printStackTrace();
                         }

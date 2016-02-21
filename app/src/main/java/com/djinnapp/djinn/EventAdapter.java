@@ -62,16 +62,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
         notifyItemInserted(index);
     }
 
-    public Event removeItem(int index) {
-        final Event event = mDataset.remove(index);
-        notifyItemRemoved(index);
-        return event;
-    }
-
     public void moveItem(int fromPosition, int toPosition) {
         final Event event = mDataset.remove(fromPosition);
         mDataset.add(toPosition, event);
         notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public Event removeItem(int index) {
+        final Event event = mDataset.remove(index);
+        notifyItemRemoved(index);
+        return event;
     }
 
     public void animateTo(List<Event> events) {
